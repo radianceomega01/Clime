@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:andriod="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:drawable="@drawable/photo_1534542447366"
+        android:duration="2000"/>
+    <item
+        android:drawable="@drawable/photo_1516951179008"
+        android:duration="2000"/>
+    <item
+        android:drawable="@drawable/photo_1498015583783"
+        android:duration="2000"/>
+
+    <item
+        android:drawable="@drawable/photo_1499479387933"
+        android:duration="2000"/>
+    <item
+        android:drawable="@drawable/photo_1530908295418"
+        android:duration="2000"/>
+</animation-list>
