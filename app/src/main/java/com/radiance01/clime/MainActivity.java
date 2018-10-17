@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         backlayout = findViewById(R.id.frame_lay);
         animationDrawable = (AnimationDrawable) backlayout.getBackground();
 
-        animationDrawable.setEnterFadeDuration(1500);
+        animationDrawable.setEnterFadeDuration(1000);
         animationDrawable.setExitFadeDuration(1000);
         animationDrawable.start();
 

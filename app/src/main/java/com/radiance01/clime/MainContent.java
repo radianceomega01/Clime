@@ -19,12 +19,17 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.radiance01.clime.model.WeatherReport;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class MainContent extends AppCompatActivity{
 
-    //http://openweathermap.org/data/2.5/forecast?lat=35&lon=139&appid=b6907d289e10d714a6e88b30761fae22
+    //http://openweathermap.org/data/2.5/forecast?lat=22.7196&lon=75.8577&appid=b6907d289e10d714a6e88b30761fae22
 
     LocationManager locationManager;
     LocationListener locationListener;
@@ -100,13 +105,43 @@ public class MainContent extends AppCompatActivity{
 
     public void volleyRequest()
     {
-        String url = "http://openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + lon + "&APPID=24f7fedb3acf45a83b2a07401f360d4f";
-
+        String url = "http://openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + lon + "&appid=b6907d289e10d714a6e88b30761fae22";
         JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Toast.makeText(MainContent.this, "Response Recieved successfully", Toast.LENGTH_SHORT).show();
                 Log.v("clime","res:"+response.toString());
+
+                try {
+
+                    ArrayList<WeatherReport> arrayList= new ArrayList<>();
+                    JSONObject city = response.getJSONObject("city");
+                    String city_name = city.getString("name");
+                    String city_country = city.getString("country");
+
+                    JSONArray list = response.getJSONArray("list");
+                    int i;
+                    for( i = 0;i<5;i=+8 );
+                    {
+                        JSONObject object = list.getJSONObject(i);
+                        JSONObject main = object.getJSONObject("main");
+                        Double temp = main.getDouble("temp");
+                        Double temp_min = main.getDouble("temp_min");
+                        Double temp_max = main.getDouble("temp_max");
+
+                        JSONArray weather = object.getJSONArray("weather");
+                        JSONObject weatherobj = weather.getJSONObject(0);
+                        String weather_main = weatherobj.getString("main");
+                        String description = weatherobj.getString("description");
+
+                        String dt_txt = object.getString("dt_txt");
+
+                        WeatherReport obj = new WeatherReport(city_name,city_country,temp.intValue(),temp_min.intValue(),temp_max.intValue(),weather_main,description,dt_txt);
+                        arrayList.add(obj);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }, new Response.ErrorListener() {
             @Override
@@ -118,5 +153,13 @@ public class MainContent extends AppCompatActivity{
 
     }
 }
+
+
+
+
+
+
+
+
 
 
