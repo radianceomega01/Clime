@@ -1,17 +1,21 @@
 package com.radiance01.clime.model;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class WeatherReport {
 
     String city_name;
     String city_country;
-    int temp;
-    int temp_min;
-    int temp_max;
+    float temp;
+    float temp_min;
+    float temp_max;
     String weather_main;
     String description;
     String dt_txt;
 
-    public WeatherReport(String city_name, String city_country, int temp, int temp_min, int temp_max, String weather_main, String description, String dt_txt) {
+    public WeatherReport(String city_name, String city_country, float temp, float temp_min, float temp_max, String weather_main, String description, String dt_txt) {
         this.city_name = city_name;
         this.city_country = city_country;
         this.temp = temp;
@@ -30,16 +34,16 @@ public class WeatherReport {
         return city_country;
     }
 
-    public int getTemp() {
-        return temp;
+    public double getTemp() {
+        return Math.floor((temp-273)*100)/100;
     }
 
-    public int getTemp_min() {
-        return temp_min;
+    public double getTemp_min() {
+        return Math.floor((temp_min-273)*100)/100;
     }
 
-    public int getTemp_max() {
-        return temp_max;
+    public double getTemp_max() {
+        return Math.round(temp_max);
     }
 
     public String getWeather_main() {
@@ -51,6 +55,8 @@ public class WeatherReport {
     }
 
     public String getDt_txt() {
+        Date date = new Date();
+        dt_txt = new SimpleDateFormat("EEE, MMM d", Locale.ENGLISH).format(date);
         return dt_txt;
     }
 }
