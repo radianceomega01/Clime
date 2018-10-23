@@ -27,7 +27,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.radiance01.clime.model.WeatherAdapter;
 import com.radiance01.clime.model.WeatherReport;
+import com.radiance01.clime.model.WeatherViewHolder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -67,6 +69,15 @@ public class MainContent extends AppCompatActivity{
         getSupportActionBar().setIcon(R.drawable.icon);
         volleyRequest();
 
+
+        recyclerView = findViewById(R.id.recycler_view);
+        LinearLayoutManager manager = new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false);
+        recyclerView.setLayoutManager(manager);
+
+        //recyclerView.setHasFixedSize(true);
+        weatherAdapter = new WeatherAdapter(arrayList);
+        recyclerView.setAdapter(weatherAdapter);
+
         lay_date = findViewById(R.id.lay_date);
         lay_city_country = findViewById(R.id.lay_city_country);
         lay_current_temp = findViewById(R.id.lay_current_temp);
@@ -74,12 +85,6 @@ public class MainContent extends AppCompatActivity{
         lay_weather = findViewById(R.id.lay_weather);
         lay_weather_icon = findViewById(R.id.lay_weather_icon);
 
-        recyclerView = findViewById(R.id.recycler_view);
-        weatherAdapter = new WeatherAdapter(arrayList);
-        recyclerView.setAdapter(weatherAdapter);
-
-        LinearLayoutManager manager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(manager);
 
          locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
          locationListener = new LocationListener() {
@@ -147,7 +152,7 @@ public class MainContent extends AppCompatActivity{
         JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Toast.makeText(MainContent.this, "Weather Info Recieved successfully", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainContent.this, "Weather Info Updated successfully", Toast.LENGTH_SHORT).show();
                 Log.v("clime","res:"+response.toString());
 
                 try {
@@ -177,10 +182,10 @@ public class MainContent extends AppCompatActivity{
                         arrayList.add(obj);
 
 
-                                update_ui();
-
-                            weatherAdapter.notifyDataSetChanged();
+                        update_ui();
+                        weatherAdapter.notifyDataSetChanged();
                     }
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -189,6 +194,7 @@ public class MainContent extends AppCompatActivity{
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.v("clime","Error"+error.getLocalizedMessage());
+                Toast.makeText(MainContent.this, "Failed to gather Info", Toast.LENGTH_SHORT).show();
             }
         });
         Volley.newRequestQueue(this).add(jsonRequest);
@@ -232,7 +238,7 @@ public class MainContent extends AppCompatActivity{
                        lay_weather.setText("Shower Rain");
                        break;
                    }
-                   case("rain"):
+                   case("Rain"):
                    {
                        lay_weather_icon.setImageResource(R.drawable.rain);
                        lay_weather.setText("Rain");
@@ -257,6 +263,7 @@ public class MainContent extends AppCompatActivity{
                        break;
                    }
 
+
                }
                String toshow_curr_temp = String.valueOf(obj.getTemp() + "°");
                String toshow_min_temp = String.valueOf(obj.getTemp_min() + "°");
@@ -267,119 +274,11 @@ public class MainContent extends AppCompatActivity{
 
 
            }
+
+
     }
 
-    public class WeatherAdapter extends RecyclerView.Adapter<WeatherViewHolder>
-    {
-        ArrayList<WeatherReport> weatherarray;
 
-        public WeatherAdapter(ArrayList<WeatherReport> weatherarray) {
-            this.weatherarray = weatherarray;
-        }
-
-        @NonNull
-        @Override
-        public WeatherViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
-            View card = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_layout,parent,false);
-            return new WeatherViewHolder(card);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull WeatherViewHolder holder, int position) {
-
-            WeatherReport report = weatherarray.get(position);
-            holder.update_cardlist(report);
-        }
-
-        @Override
-        public int getItemCount() {
-            return 0;
-        }
-    }
-    public class WeatherViewHolder extends RecyclerView.ViewHolder
-    {
-        ImageView card_icon;
-        TextView card_day;
-        TextView card_weather;
-        TextView card_maxtemp;
-        TextView card_mintemp;
-
-
-        public WeatherViewHolder(View itemView) {
-            super(itemView);
-
-
-             card_icon = findViewById(R.id.card_icon);
-             card_day = findViewById(R.id.card_day);
-             card_weather = findViewById(R.id.card_weather);
-             card_maxtemp = findViewById(R.id.card_maxtemp);
-             card_mintemp = findViewById(R.id.card_mintemp);
-        }
-        public void update_cardlist(WeatherReport report)
-        {
-            switch(obj.getWeather_main())
-            {
-                case("clear sky"):
-                {
-                    card_icon.setImageResource(R.drawable.clear_sky);
-                    card_weather.setText("Clear Sky");
-                    break;
-                }
-                case("few clouds"):
-                {
-                    card_icon.setImageResource(R.drawable.few_clouds);
-                    card_weather.setText("Few Clouds");
-                    break;
-                }
-                case("scattered clouds"):
-                {
-                    card_icon.setImageResource(R.drawable.scattered_clouds);
-                    card_weather.setText("Scattered Clouds");
-                    break;
-                }
-                case("broken clouds"):
-                {
-                    card_icon.setImageResource(R.drawable.broken_clouds);
-                    card_weather.setText("Broken Clouds");
-                    break;
-                }
-                case("shower rain"):
-                {
-                    card_icon.setImageResource(R.drawable.shower_rain);
-                    card_weather.setText("Shower Rain");
-                    break;
-                }
-                case("rain"):
-                {
-                    card_icon.setImageResource(R.drawable.rain);
-                    card_weather.setText("Rain");
-                    break;
-                }
-                case("thunderstorm"):
-                {
-                    card_icon.setImageResource(R.drawable.thunderstorm);
-                    card_weather.setText("ThunderStorm");
-                    break;
-                }
-                case("snow"):
-                {
-                    card_icon.setImageResource(R.drawable.snow);
-                    card_weather.setText("Snow");
-                    break;
-                }
-                case("mist"):
-                {
-                    card_icon.setImageResource(R.drawable.mist);
-                    card_weather.setText("Mist");
-                    break;
-                }
-            }
-            card_day.setText(obj.getDt_txt());
-           // card_maxtemp.setText(obj.getTemp_max());
-            //card_mintemp.setText(obj.getTemp_min());
-        }
-    }
 }
 
 

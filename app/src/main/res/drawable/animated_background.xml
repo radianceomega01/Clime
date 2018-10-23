@@ -6,9 +6,6 @@
     <item
         android:drawable="@drawable/photo_1516951179008"
         android:duration="1500"/>
-    <item
-        android:drawable="@drawable/photo_1498015583783"
-        android:duration="1500"/>
 
     <item
         android:drawable="@drawable/photo_1499479387933"
