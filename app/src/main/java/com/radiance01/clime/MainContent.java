@@ -181,7 +181,6 @@ public class MainContent extends AppCompatActivity{
                         obj = new WeatherReport(city_name,city_country,temp.floatValue(),temp_min.floatValue(),temp_max.floatValue(),weather_main,description,dt_txt);
                         arrayList.add(obj);
 
-
                         update_ui();
                         weatherAdapter.notifyDataSetChanged();
                     }

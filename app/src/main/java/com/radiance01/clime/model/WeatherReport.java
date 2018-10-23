@@ -1,5 +1,7 @@
 package com.radiance01.clime.model;
 
+import com.radiance01.clime.MainContent;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -26,6 +28,7 @@ public class WeatherReport {
         this.dt_txt = dt_txt;
     }
 
+
     public String getCity_name() {
         return city_name;
     }
@@ -43,7 +46,7 @@ public class WeatherReport {
     }
 
     public double getTemp_max() {
-        return Math.round(temp_max);
+        return Math.floor((temp_max-273)*100)/100;
     }
 
     public String getWeather_main() {
