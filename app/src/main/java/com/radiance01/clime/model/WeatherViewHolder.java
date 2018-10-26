@@ -40,33 +40,50 @@ public class WeatherViewHolder extends RecyclerView.ViewHolder
             }
             case("Clouds"):
             {
-                card_icon.setImageResource(R.drawable.few_clouds);
-                card_weather.setText("Few Clouds");
+                switch(report.getDescription())
+                {
+                    case ("few clouds"):
+                    {
+
+                        card_icon.setImageResource(R.drawable.few_clouds);
+                        card_weather.setText("Few Clouds");
+                        break;
+                    }
+                    case ("scattered clouds"):
+                    {
+
+                        card_icon.setImageResource(R.drawable.scattered_clouds);
+                        card_weather.setText("Scattered Clouds");
+                        break;
+                    }
+                    case ("broken clouds"):
+                    {
+
+                        card_icon.setImageResource(R.drawable.broken_clouds);
+                        card_weather.setText("Broken Clouds");
+                        break;
+                    }
+                }
                 break;
             }
-            case("scattered clouds"):
-            {
-                card_icon.setImageResource(R.drawable.scattered_clouds);
-                card_weather.setText("Scattered Clouds");
-                break;
-            }
-            case("broken clouds"):
-            {
-                card_icon.setImageResource(R.drawable.broken_clouds);
-                card_weather.setText("Broken Clouds");
-                break;
-            }
-            case("shower rain"):
-            {
-                card_icon.setImageResource(R.drawable.shower_rain);
-                card_weather.setText("Shower Rain");
-                break;
-            }
+
             case("Rain"):
             {
-                card_icon.setImageResource(R.drawable.rain);
-                card_weather.setText("Rain");
-                break;
+                switch(report.getDescription())
+                {
+                    case ("shower rain"):
+                    {
+
+                        card_icon.setImageResource(R.drawable.shower_rain);
+                        card_weather.setText("Shower Rain");
+                        break;
+                    }
+                    default:{
+                        card_icon.setImageResource(R.drawable.rain);
+                        card_weather.setText("Rain");
+                        break;
+                    }
+                }
             }
             case("Thunderstorm"):
             {
@@ -83,9 +100,11 @@ public class WeatherViewHolder extends RecyclerView.ViewHolder
             case("Mist"):
             {
                 card_icon.setImageResource(R.drawable.mist);
-                card_weather.setText( "Mist");
+                card_weather.setText("Mist");
                 break;
             }
+
+
         }
         try {
             card_day.setText(report.getDt_txt());

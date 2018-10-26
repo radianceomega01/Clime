@@ -219,33 +219,50 @@ public class MainContent extends AppCompatActivity{
                    }
                    case("Clouds"):
                    {
-                       lay_weather_icon.setImageResource(R.drawable.few_clouds);
-                       lay_weather.setText("Clouds");
+                       switch(obj.getDescription())
+                       {
+                           case ("few clouds"):
+                           {
+
+                               lay_weather_icon.setImageResource(R.drawable.few_clouds);
+                               lay_weather.setText("Clouds");
+                               break;
+                           }
+                           case ("scattered clouds"):
+                           {
+
+                               lay_weather_icon.setImageResource(R.drawable.scattered_clouds);
+                               lay_weather.setText("Clouds");
+                               break;
+                           }
+                           case ("broken clouds"):
+                           {
+
+                               lay_weather_icon.setImageResource(R.drawable.broken_clouds);
+                               lay_weather.setText("Clouds");
+                               break;
+                           }
+                       }
                        break;
                    }
-                   case("scattered clouds"):
-                   {
-                       lay_weather_icon.setImageResource(R.drawable.scattered_clouds);
-                       lay_weather.setText("Scattered Clouds");
-                       break;
-                   }
-                   case("broken clouds"):
-                   {
-                       lay_weather_icon.setImageResource(R.drawable.broken_clouds);
-                       lay_weather.setText("Broken Clouds");
-                       break;
-                   }
-                   case("shower rain"):
-                   {
-                       lay_weather_icon.setImageResource(R.drawable.shower_rain);
-                       lay_weather.setText("Shower Rain");
-                       break;
-                   }
+
                    case("Rain"):
                    {
-                       lay_weather_icon.setImageResource(R.drawable.rain);
-                       lay_weather.setText("Rain");
-                       break;
+                       switch(obj.getDescription())
+                       {
+                           case ("shower rain"):
+                           {
+
+                               lay_weather_icon.setImageResource(R.drawable.shower_rain);
+                               lay_weather.setText("Rain");
+                               break;
+                           }
+                           default:{
+                               lay_weather_icon.setImageResource(R.drawable.rain);
+                               lay_weather.setText("Rain");
+                               break;
+                           }
+                       }
                    }
                    case("Thunderstorm"):
                    {
