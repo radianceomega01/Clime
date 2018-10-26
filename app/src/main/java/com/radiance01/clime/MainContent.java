@@ -14,9 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,12 +27,12 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.radiance01.clime.model.WeatherAdapter;
 import com.radiance01.clime.model.WeatherReport;
-import com.radiance01.clime.model.WeatherViewHolder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 
 public class MainContent extends AppCompatActivity{
@@ -60,6 +58,8 @@ public class MainContent extends AppCompatActivity{
 
     WeatherAdapter weatherAdapter;
     RecyclerView recyclerView;
+
+    TextView refresh_text;
     @Override
         public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,7 +74,7 @@ public class MainContent extends AppCompatActivity{
         LinearLayoutManager manager = new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false);
         recyclerView.setLayoutManager(manager);
 
-        //recyclerView.setHasFixedSize(true);
+        recyclerView.setHasFixedSize(true);
         weatherAdapter = new WeatherAdapter(arrayList);
         recyclerView.setAdapter(weatherAdapter);
 
@@ -153,6 +153,8 @@ public class MainContent extends AppCompatActivity{
             @Override
             public void onResponse(JSONObject response) {
                 Toast.makeText(MainContent.this, "Weather Info Updated successfully", Toast.LENGTH_SHORT).show();
+                refresh_text = findViewById(R.id.refresh_text);
+                refresh_text.setVisibility(View.INVISIBLE);
                 Log.v("clime","res:"+response.toString());
 
                 try {
@@ -177,15 +179,19 @@ public class MainContent extends AppCompatActivity{
                         String description = weatherobj.getString("description");
 
                         String dt_txt = object.getString("dt_txt");
-
                         obj = new WeatherReport(city_name,city_country,temp.floatValue(),temp_min.floatValue(),temp_max.floatValue(),weather_main,description,dt_txt);
                         arrayList.add(obj);
 
-                        update_ui();
+                        if(i == 0)
+                        {
+                            update_ui();
+                        }
                         weatherAdapter.notifyDataSetChanged();
                     }
 
                 } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (ParseException e) {
                     e.printStackTrace();
                 }
             }
@@ -200,11 +206,9 @@ public class MainContent extends AppCompatActivity{
 
     }
 
-    public void update_ui()
-    {
+    public void update_ui() throws ParseException {
            if(arrayList.size() > 0)
            {
-               obj = arrayList.get(0);
                switch(obj.getWeather_main())
                {
                    case("Clear"):

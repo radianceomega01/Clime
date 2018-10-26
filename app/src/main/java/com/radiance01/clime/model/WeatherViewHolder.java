@@ -7,6 +7,8 @@ import android.widget.TextView;
 
 import com.radiance01.clime.R;
 
+import java.text.ParseException;
+
 public class WeatherViewHolder extends RecyclerView.ViewHolder
 {
     ImageView card_icon;
@@ -85,7 +87,11 @@ public class WeatherViewHolder extends RecyclerView.ViewHolder
                 break;
             }
         }
-        card_day.setText(report.getDt_txt());
+        try {
+            card_day.setText(report.getDt_txt());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         card_maxtemp.setText(String.valueOf(report.getTemp_max()));
         card_mintemp.setText(String.valueOf(report.getTemp_min()));
     }

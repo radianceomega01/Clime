@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         animationDrawable.setExitFadeDuration(1000);
         animationDrawable.start();
 
-        new CountDownTimer(4500, 1000) {
+        new CountDownTimer(5200, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
 

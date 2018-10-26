@@ -1,7 +1,7 @@
 package com.radiance01.clime.model;
 
-import com.radiance01.clime.MainContent;
-
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -43,6 +43,7 @@ public class WeatherReport {
 
     public double getTemp_min() {
         return Math.floor((temp_min-273)*100)/100;
+
     }
 
     public double getTemp_max() {
@@ -57,9 +58,17 @@ public class WeatherReport {
         return description;
     }
 
-    public String getDt_txt() {
-        Date date = new Date();
-        dt_txt = new SimpleDateFormat("EEE, MMM d", Locale.ENGLISH).format(date);
-        return dt_txt;
+    public String getDt_txt() throws ParseException {
+
+       SimpleDateFormat inputformat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+       SimpleDateFormat outputformat = new SimpleDateFormat("EEE, MMM d");
+
+       Date date = null;
+
+       date = inputformat.parse(dt_txt);
+       String outdate = outputformat.format(date);
+
+       return outdate;
+
     }
 }

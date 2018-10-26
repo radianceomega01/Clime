@@ -39,6 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
         android:text="No Info"
         android:textColor="#FFFFFF"
         android:textSize="24sp"
@@ -52,6 +53,7 @@
         android:layout_height="115dp"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
         android:gravity="center"
         android:text="~°"
         android:textColor="#FFFFFF"
@@ -91,6 +93,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="20dp"
         android:layout_marginRight="20dp"
+        android:layout_marginTop="12dp"
         android:text="No Info"
         android:textColor="#FFFFFF"
         android:textSize="24sp"
@@ -100,12 +103,30 @@
         app:layout_constraintTop_toBottomOf="@+id/lay_weather_icon"
         app:layout_constraintVertical_bias="0.111" />
 
+    <TextView
+        android:id="@+id/refresh_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="140dp"
+        android:text="Swipe Down to refresh Weather Info"
+        android:textColor="@color/cardview_light_background"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.507"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lay_city_country" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lay_city_country" />
+        app:layout_constraintTop_toBottomOf="@+id/lay_city_country">
+
+    </android.support.v7.widget.RecyclerView>
+
 </android.support.constraint.ConstraintLayout>
