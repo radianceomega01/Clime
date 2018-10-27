@@ -15,6 +15,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,6 +62,7 @@ public class MainContent extends AppCompatActivity{
     RecyclerView recyclerView;
 
     TextView refresh_text;
+
     @Override
         public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,8 +78,6 @@ public class MainContent extends AppCompatActivity{
         recyclerView.setLayoutManager(manager);
 
         recyclerView.setHasFixedSize(true);
-        weatherAdapter = new WeatherAdapter(arrayList);
-        recyclerView.setAdapter(weatherAdapter);
 
         lay_date = findViewById(R.id.lay_date);
         lay_city_country = findViewById(R.id.lay_city_country);
@@ -121,7 +122,6 @@ public class MainContent extends AppCompatActivity{
         {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},0);
         }
-
 
     }
     @Override
@@ -186,7 +186,8 @@ public class MainContent extends AppCompatActivity{
                         {
                             update_ui();
                         }
-                        weatherAdapter.notifyDataSetChanged();
+                        //weatherAdapter.notifyDataSetChanged();
+                        run_animation(recyclerView);
                     }
 
                 } catch (JSONException e) {
@@ -296,6 +297,21 @@ public class MainContent extends AppCompatActivity{
            }
 
 
+    }
+
+    public void run_animation(RecyclerView recyclerView)
+    {
+        Context context = recyclerView.getContext();
+        LayoutAnimationController controller;
+
+        controller = AnimationUtils.loadLayoutAnimation(context,R.anim.recycler_animation);
+
+        weatherAdapter = new WeatherAdapter(arrayList);
+        recyclerView.setAdapter(weatherAdapter);
+
+        recyclerView.setLayoutAnimation(controller);
+        recyclerView.getAdapter().notifyDataSetChanged();
+        recyclerView.scheduleLayoutAnimation();
     }
 
 
