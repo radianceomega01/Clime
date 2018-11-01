@@ -1,6 +1,8 @@
 package com.radiance01.clime;
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -10,6 +12,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -55,6 +58,7 @@ public class MainContent extends AppCompatActivity{
     TextView lay_weather;
     ImageView lay_weather_icon;
 
+
     ArrayList<WeatherReport> arrayList = new ArrayList<>();
     WeatherReport obj;
 
@@ -62,6 +66,15 @@ public class MainContent extends AppCompatActivity{
     RecyclerView recyclerView;
 
     TextView refresh_text;
+    SwipeRefreshLayout refresh_layout;
+
+
+    @Override
+    public void onBackPressed() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            finishAffinity();
+        }
+    }
 
     @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -70,8 +83,6 @@ public class MainContent extends AppCompatActivity{
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setIcon(R.drawable.icon);
-        volleyRequest();
-
 
         recyclerView = findViewById(R.id.recycler_view);
         LinearLayoutManager manager = new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false);
@@ -85,6 +96,18 @@ public class MainContent extends AppCompatActivity{
         lay_min_temp = findViewById(R.id.lay_min_temp);
         lay_weather = findViewById(R.id.lay_weather);
         lay_weather_icon = findViewById(R.id.lay_weather_icon);
+
+        refresh_layout = findViewById(R.id.refresh_layout);
+        refresh_layout.setVisibility(View.VISIBLE);
+        refresh_layout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                Intent intent = new Intent(getApplicationContext(),MainContent.class);
+                startActivity(intent);
+            }
+        });
+
 
 
          locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
@@ -153,8 +176,7 @@ public class MainContent extends AppCompatActivity{
             @Override
             public void onResponse(JSONObject response) {
                 Toast.makeText(MainContent.this, "Weather Info Updated successfully", Toast.LENGTH_SHORT).show();
-                refresh_text = findViewById(R.id.refresh_text);
-                refresh_text.setVisibility(View.INVISIBLE);
+                refresh_layout.setVisibility(View.INVISIBLE);
                 Log.v("clime","res:"+response.toString());
 
                 try {
