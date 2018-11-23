@@ -1,6 +1,7 @@
 package com.radiance01.clime;
+
 import android.Manifest;
-import android.app.Activity;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -40,12 +41,13 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.util.ArrayList;
 
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
+
 public class MainContent extends AppCompatActivity{
 
-    //http://api.openweathermap.org/data/2.5/forecast?lat=22.7196&lon=75.8577&appid=2006eb5abb29e4ea5527dcfcc30ff771
-
     LocationManager locationManager;
-    LocationListener locationListener;
+    LocationListener listener;
     Toolbar toolbar;
 
     Double lat = 22.7196;
@@ -58,7 +60,6 @@ public class MainContent extends AppCompatActivity{
     TextView lay_weather;
     ImageView lay_weather_icon;
 
-
     ArrayList<WeatherReport> arrayList = new ArrayList<>();
     WeatherReport obj;
 
@@ -67,6 +68,7 @@ public class MainContent extends AppCompatActivity{
 
     TextView refresh_text;
     SwipeRefreshLayout refresh_layout;
+    Boolean tovisit = TRUE;
 
 
     @Override
@@ -76,8 +78,9 @@ public class MainContent extends AppCompatActivity{
         }
     }
 
+    @SuppressLint("MissingPermission")
     @Override
-        public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_main);
         toolbar = findViewById(R.id.toolbar);
@@ -85,8 +88,11 @@ public class MainContent extends AppCompatActivity{
         getSupportActionBar().setIcon(R.drawable.icon);
 
         recyclerView = findViewById(R.id.recycler_view);
-        LinearLayoutManager manager = new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false);
+        LinearLayoutManager manager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(manager);
+
+        weatherAdapter = new WeatherAdapter(arrayList);
+        recyclerView.setAdapter(weatherAdapter);
 
         recyclerView.setHasFixedSize(true);
 
@@ -97,27 +103,31 @@ public class MainContent extends AppCompatActivity{
         lay_weather = findViewById(R.id.lay_weather);
         lay_weather_icon = findViewById(R.id.lay_weather_icon);
 
+
         refresh_layout = findViewById(R.id.refresh_layout);
         refresh_layout.setVisibility(View.VISIBLE);
         refresh_layout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
 
-                Intent intent = new Intent(getApplicationContext(),MainContent.class);
+                Intent intent = new Intent(getApplicationContext(), MainContent.class);
                 startActivity(intent);
             }
         });
 
-
-
-         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-         locationListener = new LocationListener() {
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        listener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
 
-                lat = location.getLatitude();
-                lon = location.getLongitude();
-                volleyRequest();
+                if(tovisit)
+                {
+
+                    lat = location.getLatitude();
+                    lon = location.getLongitude();
+                    volleyRequest();
+                }
+                tovisit = FALSE;
             }
 
             @Override
@@ -136,33 +146,39 @@ public class MainContent extends AppCompatActivity{
             }
         };
 
-
-         //--------------------------getting explicit location permission from the user-------------------------------
-
-
-
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        if(Build.VERSION.SDK_INT < 23)
         {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},0);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, listener);
+        }
+        else {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            } else {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, listener);
+            }
         }
 
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         if(grantResults.length >0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
         {
-            if(Build.VERSION.SDK_INT >= 23)
+            if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
             {
-                if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-                {
-                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},0);
-                }
+
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,listener);
+
+            }
+            else
+            {
+                Toast.makeText(this, "Permission denied by user!", Toast.LENGTH_SHORT).show();
             }
 
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locationListener);
         }
+
     }
 
 
@@ -328,13 +344,14 @@ public class MainContent extends AppCompatActivity{
 
         controller = AnimationUtils.loadLayoutAnimation(context,R.anim.recycler_animation);
 
-        weatherAdapter = new WeatherAdapter(arrayList);
-        recyclerView.setAdapter(weatherAdapter);
+        //weatherAdapter = new WeatherAdapter(arrayList);
+        //recyclerView.setAdapter(weatherAdapter);
 
         recyclerView.setLayoutAnimation(controller);
         recyclerView.getAdapter().notifyDataSetChanged();
         recyclerView.scheduleLayoutAnimation();
     }
+
 
 
 }
