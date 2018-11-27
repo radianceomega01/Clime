@@ -224,7 +224,7 @@ public class MainContent extends AppCompatActivity{
                         {
                             update_ui();
                         }
-                        //weatherAdapter.notifyDataSetChanged();
+                        weatherAdapter.notifyDataSetChanged();
                         run_animation(recyclerView);
                     }
 
@@ -343,9 +343,6 @@ public class MainContent extends AppCompatActivity{
         LayoutAnimationController controller;
 
         controller = AnimationUtils.loadLayoutAnimation(context,R.anim.recycler_animation);
-
-        //weatherAdapter = new WeatherAdapter(arrayList);
-        //recyclerView.setAdapter(weatherAdapter);
 
         recyclerView.setLayoutAnimation(controller);
         recyclerView.getAdapter().notifyDataSetChanged();

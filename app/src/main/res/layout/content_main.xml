@@ -5,13 +5,14 @@
     android:id="@+id/layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/holo_blue_dark">
+    android:background="#448AFF">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary"
+        android:elevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -19,24 +20,25 @@
         app:titleTextAppearance="@style/TextAppearance.AppCompat.Headline"
         app:titleTextColor="@android:color/background_light" />
 
+
     <TextView
         android:id="@+id/lay_date"
         android:layout_width="wrap_content"
         android:layout_height="42dp"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
         android:text="No Info"
         android:textColor="#FFFFFF"
         android:textSize="32sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+        app:layout_constraintTop_toTopOf="@+id/date_guide" />
 
     <TextView
         android:id="@+id/lay_city_country"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
@@ -44,6 +46,7 @@
         android:textColor="#FFFFFF"
         android:textSize="24sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/recycler_view"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lay_current_temp" />
 
@@ -53,26 +56,28 @@
         android:layout_height="115dp"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
         android:gravity="center"
         android:text="~°"
         android:textColor="#FFFFFF"
-        android:textSize="54sp"
-        android:textStyle="normal|bold|italic"
+        android:textSize="48sp"
+        android:textStyle="normal|bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lay_date" />
+        app:layout_constraintTop_toTopOf="@+id/tenp_guide" />
 
     <TextView
         android:id="@+id/lay_min_temp"
         android:layout_width="wrap_content"
         android:layout_height="45dp"
         android:layout_marginBottom="20dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="4dp"
         android:gravity="center"
         android:text="~°"
         android:textColor="#FFFFFF"
-        android:textSize="18dp"
-        android:textStyle="bold|italic"
+        android:textSize="15sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/lay_current_temp"
+        app:layout_constraintEnd_toStartOf="@+id/vertical_guide"
         app:layout_constraintStart_toEndOf="@+id/lay_current_temp" />
 
     <ImageView
@@ -80,9 +85,11 @@
         android:layout_width="100dp"
         android:layout_height="111dp"
         android:layout_marginRight="6dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toTopOf="@+id/lay_city_country"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/vertical_guide"
         app:layout_constraintTop_toBottomOf="@+id/lay_date"
         app:srcCompat="@drawable/icon" />
 
@@ -90,43 +97,91 @@
         android:id="@+id/lay_weather"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginRight="12dp"
         android:text="No Info"
         android:textColor="#FFFFFF"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/lay_city_country"
-        app:layout_constraintEnd_toEndOf="@+id/lay_weather_icon"
-        app:layout_constraintTop_toBottomOf="@+id/lay_weather_icon"
-        app:layout_constraintVertical_bias="0.111" />
+        app:layout_constraintEnd_toEndOf="@+id/lay_weather_icon" />
 
-    <TextView
-        android:id="@+id/refresh_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="140dp"
-        android:text="Swipe Down to refresh Weather Info"
-        android:textColor="@color/cardview_light_background"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.507"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lay_city_country" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="30dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_guide"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/top_guide">
+
+
+    </android.support.v7.widget.RecyclerView>
+
+    <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lay_city_country">
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintVertical_bias="0.0"
+        tools:context=".MainActivity">
 
-    </android.support.v7.widget.RecyclerView>
+        <TextView
+            android:id="@+id/refresh_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="8dp"
+            android:gravity="bottom|center_horizontal"
+            android:paddingBottom="24dp"
+            android:text="Swipe Down to refresh Weather Info"
+            android:textColor="@color/cardview_light_background"
+            android:textSize="18sp"
+            tools:layout_editor_absoluteX="8dp"
+            tools:layout_editor_absoluteY="425dp" />
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/top_guide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="329dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.6"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/bottom_guide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="0dp" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/tenp_guide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.26" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/vertical_guide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.64" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/date_guide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.15" />
 
 </android.support.constraint.ConstraintLayout>

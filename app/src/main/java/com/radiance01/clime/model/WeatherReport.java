@@ -60,10 +60,10 @@ public class WeatherReport {
 
     public String getDt_txt() throws ParseException {
 
-       SimpleDateFormat inputformat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-       SimpleDateFormat outputformat = new SimpleDateFormat("EEE, MMM d");
+       SimpleDateFormat inputformat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss",Locale.ENGLISH);
+       SimpleDateFormat outputformat = new SimpleDateFormat("EEE, dd MMM",Locale.ENGLISH);
 
-       Date date = null;
+       Date date;
 
        date = inputformat.parse(dt_txt);
        String outdate = outputformat.format(date);
